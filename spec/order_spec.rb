@@ -1,10 +1,12 @@
 require './lib/order.rb'
 
 describe Orders::Order do 
-  let(:order) { Orders::Order.new(nil, raw_name: 'Провод ПЭТВ-2 0,950 ТУ 16-705-110-79 6Кв зелёный abcehkmoptuvxy', unit: 'кг', qty: 50)}
+  let(:order) { Orders::Order.new(nil, raw_name: 'Провод ПЭТВ-2 0,950 ТУ 16-705-110-79 6Кв зелёный', unit: 'кг', qty: 50)}
+  let(:check_lat) { Orders::Order.new(nil, raw_name: 'abcehkmoptuvxy', unit: '', qty: 0)}
+
 
   it '#raw_name' do
-    expect(order.raw_name).to eq('Провод ПЭТВ-2 0,950 ТУ 16-705-110-79 6Кв зелёный abcehkmoptuvxy')
+    expect(order.raw_name).to eq('Провод ПЭТВ-2 0,950 ТУ 16-705-110-79 6Кв зелёный')
   end
 
   it '#unit' do
@@ -16,7 +18,11 @@ describe Orders::Order do
   end 
 
   it '#up_cyr_name' do
-    expect(order.up_cyr_name).to eq('ПРОВОД ПЭТВ-2 0,950 ТУ 16-705-110-79 6КВ ЗЕЛЁНЫЙ АВСЕНКМОРТИВХУ')
+    expect(check_lat.up_cyr_name).to eq('АВСЕНКМОРТИВХУ')
+  end
+
+  it '#voltage' do
+    expect(order.voltage).to eq('6КВ')
   end
 
 end

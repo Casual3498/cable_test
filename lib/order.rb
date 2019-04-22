@@ -10,7 +10,7 @@ module Orders
       @qty = qty
       @up_cyr_name = to_upcase_cyrilic @raw_name
 
-      # @voltage = parse_voltage @up_cyr_name
+      @voltage = parse_voltage @up_cyr_name
 
 
     end
@@ -19,26 +19,29 @@ module Orders
     private
 
     def to_upcase_cyrilic(str)
+      return nil unless str
       up_cyr_str = str.upcase
-      up_cyr_str.gsub!('A','А')
-      .gsub!('B','В')
-      .gsub!('C','С')
-      .gsub!('E','Е')
-      .gsub!('H','Н')
-      .gsub!('K','К')
-      .gsub!('M','М')
-      .gsub!('O','О')
-      .gsub!('P','Р')
-      .gsub!('T','Т')
-      .gsub!('U','И')
-      .gsub!('V','В')
-      .gsub!('X','Х')
-      .gsub!('Y','У')
+      up_cyr_str.gsub('A','А')
+      .gsub('B','В')
+      .gsub('C','С')
+      .gsub('E','Е')
+      .gsub('H','Н')
+      .gsub('K','К')
+      .gsub('M','М')
+      .gsub('O','О')
+      .gsub('P','Р')
+      .gsub('T','Т')
+      .gsub('U','И')
+      .gsub('V','В')
+      .gsub('X','Х')
+      .gsub('Y','У')
     end
 
-    # def parse_voltage(str)
-    #   ary
-    # end
+    def parse_voltage(up_cyr_str)
+      return nil unless up_cyr_str
+      match=/\d+([.|,]\d+)?([-]?|\s*)[К|M]?В/.match up_cyr_str
+      match[0] if match
+    end
 
 
   end
