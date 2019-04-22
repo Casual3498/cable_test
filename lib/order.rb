@@ -5,6 +5,8 @@ module Orders
     attr_reader :raw_name, :unit, :qty, :up_cyr_name, :type, :size, :color, :version, :voltage, :standard
 
     COLORS_ARRAY = %w(КРАСН ОРАНЖ ЖЁЛТ ЖЕЛТ ЗЕЛЕН ЗЕЛЁН ГОЛУБ СИН ФИОЛЕТ КОРИЧН ЧЕРН ЧЁРН БЕЛ)
+    TYPE_ARRAY = %w(ПЭТД ПЭТВ ПУГВ АПБ)
+    VERSION_ARRAY = %w(ХЛ)
 
     def initialize(creator, raw_name:, unit:, qty:)
       @creator = creator
@@ -12,12 +14,28 @@ module Orders
       @unit = unit
       @qty = qty
       @up_cyr_name = to_upcase_cyrilic @raw_name
+      @tail = String.new(@up_cyr_name)
 
-      @voltage = parse_voltage @up_cyr_name
+      @voltage = parse_voltage @tail
+      @tail.sub! @voltage.to_s, '' # cut voltage
 
-      @color = parse_color @up_cyr_name.sub @voltage.to_s, ''
+      @color = parse_color @tail
+      @tail.sub! @color.to_s, '' # cut color
 
-      @standard = parse_standard @up_cyr_name.sub(@voltage.to_s, '').sub(@color.to_s, '')
+      @standard = parse_standard @tail
+      @tail.sub! @standard.to_s, '' # cut standard
+
+      temp = parse_version @tail
+      if temp
+        @version = temp[:version]
+        @tail.sub! temp[:cut], '' # cut version
+      end
+
+      temp = parse_type @tail   
+      if temp
+        @type = temp[:type]
+        @tail.sub! temp[:cut], '' # cut version
+      end
 
 
     end
@@ -61,6 +79,22 @@ module Orders
       match = /(ТУ|ГОСТ)\s*\S*/.match up_cyr_str
       match[0] if match
     end
+
+    def parse_version(up_cyr_str)
+      return nil unless up_cyr_str
+      match = /[-|\s](#{VERSION_ARRAY.join('|')})\s/.match up_cyr_str
+      { version: match[1], cut: match[0] } if match
+    end
+
+    def parse_type(up_cyr_str)
+      return nil unless up_cyr_str
+      TYPE_ARRAY.each do |type|
+        match = /\A\S*\s*(#{type}[-]\d+|#{type})[-]?/.match up_cyr_str
+        return { type: match[1], cut: match[0] } if match
+      end
+      nil
+    end
+
 
   end
 end
