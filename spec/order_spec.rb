@@ -49,4 +49,12 @@ describe Orders::Order do
     expect(check_version.type).to eq('ПУГВ')
   end
 
+  it '#size' do
+    expect(order.size).to eq('0,950')
+  end
+
+  it '#size (version)' do
+    expect(check_version.size).to eq('2Х16')
+  end
+
 end

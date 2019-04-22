@@ -14,28 +14,31 @@ module Orders
       @unit = unit
       @qty = qty
       @up_cyr_name = to_upcase_cyrilic @raw_name
-      @tail = String.new(@up_cyr_name)
+      tail = String.new(@up_cyr_name)
 
-      @voltage = parse_voltage @tail
-      @tail.sub! @voltage.to_s, '' # cut voltage
+      @voltage = parse_voltage tail
+      tail.sub! @voltage.to_s, '' # cut voltage
 
-      @color = parse_color @tail
-      @tail.sub! @color.to_s, '' # cut color
+      @color = parse_color tail
+      tail.sub! @color.to_s, '' # cut color
 
-      @standard = parse_standard @tail
-      @tail.sub! @standard.to_s, '' # cut standard
+      @standard = parse_standard tail
+      tail.sub! @standard.to_s, '' # cut standard
 
-      temp = parse_version @tail
+      temp = parse_version tail
       if temp
         @version = temp[:version]
-        @tail.sub! temp[:cut], '' # cut version
+        tail.sub! temp[:cut], '' # cut version
       end
 
-      temp = parse_type @tail   
+      temp = parse_type tail   
       if temp
         @type = temp[:type]
-        @tail.sub! temp[:cut], '' # cut version
+        tail.sub! temp[:cut], '' # cut version
       end
+
+      # beleive that only size left
+      @size = tail.strip 
 
 
     end
