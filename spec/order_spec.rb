@@ -33,4 +33,9 @@ describe Orders::Order do
     expect(order.color).to eq('КРАСНО-КОРИЧНЕВЫЙ')
   end
 
+  it '#standard' do
+    expect(order.standard).to eq('ТУ 16-705-110-79')
+  end
+
+
 end

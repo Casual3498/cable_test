@@ -1,3 +1,4 @@
+require 'set'
 
 module Orders
   class Order
@@ -15,6 +16,8 @@ module Orders
       @voltage = parse_voltage @up_cyr_name
 
       @color = parse_color @up_cyr_name.sub @voltage.to_s, ''
+
+      @standard = parse_standard @up_cyr_name.sub(@voltage.to_s, '').sub(@color.to_s, '')
 
 
     end
@@ -53,6 +56,11 @@ module Orders
       match[0] if match
     end
 
+    def parse_standard(up_cyr_str)
+      return nil unless up_cyr_str
+      match = /(ТУ|ГОСТ)\s*\S*/.match up_cyr_str
+      match[0] if match
+    end
 
   end
 end
