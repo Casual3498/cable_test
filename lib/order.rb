@@ -1,4 +1,3 @@
-require 'set'
 
 module Orders
   class Order
@@ -13,6 +12,7 @@ module Orders
       @raw_name = raw_name
       @unit = unit
       @qty = qty
+
       @up_cyr_name = to_upcase_cyrilic @raw_name
       tail = String.new(@up_cyr_name)
 
@@ -40,8 +40,22 @@ module Orders
       # beleive that only size left
       @size = tail.strip 
 
-
     end
+
+  def to_s
+    "\n
+     raw_name: #@raw_name
+     up_cyr_name: #@up_cyr_name\n
+     марка: #@type
+     размер: #@size
+     цвет: #@color
+     исполнение: #@version
+     напряжение: #@voltage
+     технические условия или гост: #@standard
+     единица измерения: #@unit
+     количество: #@qty
+     --------------------------------------------------"
+  end
 
 
     private
